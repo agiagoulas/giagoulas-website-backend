@@ -7,7 +7,7 @@ load_dotenv()
 from routers.galleries import router as galleries_router
 from routers.posts import router as posts_router
 
-app = FastAPI()
+app = FastAPI(title="Giagoulas Website Backend")
 
 app.include_router(galleries_router)
 app.include_router(posts_router)
