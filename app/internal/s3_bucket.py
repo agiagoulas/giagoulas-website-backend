@@ -21,7 +21,8 @@ class S3Bucket:
 
     def upload_image(self, file: BinaryIO, filename: str):
         image_key = f"{uuid4()}-{filename}"
-        self.client.upload_fileobj(file, AWS_IMAGE_BUCKET_NAME, image_key)
+        self.client.upload_fileobj(Fileobj=file, Bucket=AWS_IMAGE_BUCKET_NAME, Key=image_key)
+        self.client.put_object_acl(ACL="public-read", Bucket=AWS_IMAGE_BUCKET_NAME, Key=image_key)
         return f"https://{AWS_IMAGE_BUCKET_NAME}.s3.{AWS_S3_REGION}.amazonaws.com/{image_key}", image_key
 
     def delete_image(self, image_key: str):
