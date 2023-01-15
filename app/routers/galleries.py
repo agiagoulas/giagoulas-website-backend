@@ -1,9 +1,9 @@
 from fastapi import APIRouter, UploadFile
 
-from config import deps
-from internal.models import Gallery
-from internal.abstractions.database import Database
-from internal.abstractions.object_storage import ObjectStore
+from app.config import deps
+from app.internal.models import Gallery
+from app.internal.abstractions.database import Database
+from app.internal.abstractions.object_storage import ObjectStore
 
 router = APIRouter(
     prefix="/api/galleries",
@@ -31,14 +31,23 @@ async def get_gallery(
     return db.get_gallery(_id=_id)
 
 
+@router.put("/{_id}")
+async def update_gallery(
+        _id: str,
+        gallery: Gallery,
+        db: Database = deps.depends(Database)):
+    return db.update_gallery(_id=_id, gallery=gallery)
+
+
 @router.delete("/{_id}")
 async def delete_gallery(
         _id: str,
         object_store: ObjectStore = deps.depends(ObjectStore),
         db: Database = deps.depends(Database)):
     gallery = db.get_gallery(_id=_id)
-    for images in gallery["images"]:
-        object_store.delete_image(images["key"])
+    if "images" in gallery:
+        for images in gallery["images"]:
+            object_store.delete_image(images["key"])
     return db.delete_gallery(_id=_id)
 
 

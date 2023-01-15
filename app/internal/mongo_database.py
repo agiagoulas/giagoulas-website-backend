@@ -3,7 +3,7 @@ import pydantic
 from pymongo import MongoClient
 from bson import ObjectId
 
-from internal.models import Gallery
+from app.internal.models import Gallery
 
 pydantic.json.ENCODERS_BY_TYPE[ObjectId] = str
 
@@ -33,6 +33,10 @@ class MongoDatabase:
 
     def add_gallery(self, gallery: Gallery):
         _id = self.galleries_collection.insert_one(gallery.dict()).inserted_id
+        return self.get_gallery(_id)
+
+    def update_gallery(self, _id: str, gallery: Gallery):
+        self.galleries_collection.update_one({"_id": ObjectId(_id)}, { "$set": gallery.dict()})
         return self.get_gallery(_id)
 
     def delete_gallery(self, _id: str):

@@ -1,4 +1,4 @@
-from internal.models import Gallery
+from app.internal.models import Gallery
 
 
 class Database:
@@ -12,6 +12,9 @@ class Database:
         pass
 
     def add_gallery(self, gallery: Gallery):
+        pass
+
+    def update_gallery(self, _id: str, gallery: Gallery):
         pass
 
     def delete_gallery(self, _id: str):
