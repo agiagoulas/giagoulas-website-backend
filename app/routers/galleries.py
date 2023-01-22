@@ -12,12 +12,14 @@ router = APIRouter(
 
 
 @router.get("/")
+@router.get("")
 async def get_galleries(
         db: Database = deps.depends(Database)):
     return db.get_all_galleries()
 
 
 @router.post("/", status_code=201)
+@router.post("", status_code=201)
 async def add_gallery(
         gallery: Gallery,
         db: Database = deps.depends(Database)):

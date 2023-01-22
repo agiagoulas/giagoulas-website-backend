@@ -14,12 +14,6 @@ app = FastAPI(title="Giagoulas Website Backend")
 app.include_router(galleries_router)
 app.include_router(posts_router)
 
-
-@app.get("/")
-async def test():
-    return "Hello World"
-
-
 handler = Mangum(app=app, lifespan="off")
 
 if __name__ == "__main__":
