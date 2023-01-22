@@ -15,7 +15,7 @@ jobs:
           architecture: x64
       - name: Install Python Venv
         run: pip3 install virtualenv
-      - name:  Setup Virtual env
+      - name:  Setup Venv
         uses: actions/cache@v2
         id: cache-venv
         with:
@@ -23,11 +23,11 @@ jobs:
           key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
           restore-keys: |
             ${{ runner.os }}-venv-
-      - name: Activate and Install Depencies into Venv
+      - name: Activate and Install Dependencies into Venv
         run: python -m venv venv && source venv/bin/activate &&
           pip3 install -r requirements.txt
         if: steps.cache-venv.outputs.cache-hit != 'true'
-      - name: Create Zipfile archive of Dependencies
+      - name: Create Zipfile archive of Venv Dependencies
         run: |
           cd ./venv/lib/python3.9/site-packages
           zip -r9 ../../../../app.zip .

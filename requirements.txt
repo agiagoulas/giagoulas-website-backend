@@ -6,3 +6,4 @@ pymongo~=4.3.3
 boto3~=1.26.50
 python-multipart
 lagom~=2.2.0
+mangum~=0.17.0
