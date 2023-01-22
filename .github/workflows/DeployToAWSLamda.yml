@@ -1,0 +1,40 @@
+name: Deploy To AWS Lambda
+on:
+  push:
+    branches: [ main ]
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          architecture: x64
+      - name: Install Python Venv
+        run: pip3 install virtualenv
+      - name:  Setup Virtual env
+        uses: actions/cache@v2
+        id: cache-venv
+        with:
+          path: venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-
+      - name: Activate and Install Depencies into Venv
+        run: python -m venv venv && source venv/bin/activate &&
+          pip3 install -r requirements.txt
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+      - name: Create Zipfile archive of Dependencies
+        run: |
+          cd ./venv/lib/python3.9/site-packages
+          zip -r9 ../../../../app.zip .
+      - name: Add Src to Zip file
+        run: cd ./src && zip -g ../app.zip -r .
+      - name: Upload Zip File Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: app.zip
