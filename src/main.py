@@ -1,11 +1,12 @@
 import uvicorn
+import os
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from routers.galleries import router as galleries_router
-from routers.posts import router as posts_router
+from src.routers.galleries import router as galleries_router
+from src.routers.posts import router as posts_router
 
 app = FastAPI(title="Giagoulas Website Backend")
 
@@ -13,4 +14,4 @@ app.include_router(galleries_router)
 app.include_router(posts_router)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
