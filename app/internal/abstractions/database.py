@@ -1,4 +1,4 @@
-from src.internal.models.gallery import Gallery
+from app.internal.models.gallery import Gallery
 
 
 class Database:

@@ -3,7 +3,7 @@ import pydantic
 from pymongo import MongoClient
 from bson import ObjectId
 
-from src.internal.models.gallery import Gallery
+from app.internal.models.gallery import Gallery
 
 pydantic.json.ENCODERS_BY_TYPE[ObjectId] = str
 

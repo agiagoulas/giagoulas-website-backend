@@ -1,9 +1,9 @@
 from fastapi import APIRouter, UploadFile
 
-from src.config import deps
-from src.internal.models.gallery import Gallery
-from src.internal.abstractions.database import Database
-from src.internal.abstractions.object_storage import ObjectStore
+from app.config import deps
+from app.internal.models.gallery import Gallery
+from app.internal.abstractions.database import Database
+from app.internal.abstractions.object_storage import ObjectStore
 
 router = APIRouter(
     prefix="/api/galleries",
