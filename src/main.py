@@ -6,8 +6,8 @@ from mangum import Mangum
 
 load_dotenv()
 
-from src.routers.galleries import router as galleries_router
-from src.routers.posts import router as posts_router
+from routers.galleries import router as galleries_router
+from routers.posts import router as posts_router
 
 app = FastAPI(title="Giagoulas Website Backend")
 
