@@ -4,6 +4,7 @@ from config import deps
 from internal.models.gallery import Gallery
 from internal.abstractions.database import Database
 from internal.abstractions.object_storage import ObjectStore
+from internal.services.image_converter import convert_to_webp
 
 router = APIRouter(
     prefix="/api/galleries",
@@ -55,19 +56,22 @@ async def delete_gallery(
 
 @router.post("/addImageToGallery/")
 async def add_image_to_gallery(
-        gallery_id: str,
-        file: UploadFile,
+        _id: str,
+        files: list[UploadFile],
         object_store: ObjectStore = deps.depends(ObjectStore),
         db: Database = deps.depends(Database)):
-    url, image_key = object_store.upload_image(file=file.file, filename=file.filename)
-    return db.add_image(_id=gallery_id, url=url, image_key=image_key)
+    for file in files:
+        webp_picture, webp_picture_filename = convert_to_webp(file.file, file.filename)
+        url, image_key = object_store.upload_image(file=webp_picture, filename=webp_picture_filename)
+        db.add_image(_id=_id, url=url, image_key=image_key)
+    return db.get_gallery(_id=_id)
 
 
 @router.delete("/deleteImageFromGallery/")
 async def delete_image_from_gallery(
-        gallery_id: str,
+        _id: str,
         image_key: str,
         object_store: ObjectStore = deps.depends(ObjectStore),
         db: Database = deps.depends(Database)):
     object_store.delete_image(image_key=image_key)
-    return db.delete_image(_id=gallery_id, image_key=image_key)
+    return db.delete_image(_id=_id, image_key=image_key)
