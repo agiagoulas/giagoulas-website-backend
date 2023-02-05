@@ -25,3 +25,6 @@ class Database:
 
     def delete_image(self, _id: str, image_key: str):
         pass
+
+    def set_cover_image(self, _id: str, image_url: str, image_key: str):
+        pass

@@ -54,7 +54,7 @@ async def delete_gallery(
     return db.delete_gallery(_id=_id)
 
 
-@router.post("/addImageToGallery/")
+@router.post("/addImageToGallery")
 async def add_image_to_gallery(
         _id: str,
         files: list[UploadFile],
@@ -67,7 +67,7 @@ async def add_image_to_gallery(
     return db.get_gallery(_id=_id)
 
 
-@router.delete("/deleteImageFromGallery/")
+@router.delete("/deleteImageFromGallery")
 async def delete_image_from_gallery(
         _id: str,
         image_key: str,
@@ -75,3 +75,13 @@ async def delete_image_from_gallery(
         db: Database = deps.depends(Database)):
     object_store.delete_image(image_key=image_key)
     return db.delete_image(_id=_id, image_key=image_key)
+
+
+@router.post("/setCoverImage")
+async def set_cover_image(
+        _id: str,
+        image_key: str,
+        image_url: str,
+        db: Database = deps.depends(Database)):
+    db.set_cover_image(_id=_id, image_url=image_url, image_key=image_key)
+    return db.get_gallery(_id=_id)

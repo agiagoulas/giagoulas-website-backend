@@ -36,7 +36,7 @@ class MongoDatabase:
         return self.get_gallery(_id)
 
     def update_gallery(self, _id: str, gallery: Gallery):
-        self.galleries_collection.update_one({"_id": ObjectId(_id)}, { "$set": gallery.dict()})
+        self.galleries_collection.update_one({"_id": ObjectId(_id)}, {"$set": gallery.dict()})
         return self.get_gallery(_id)
 
     def delete_gallery(self, _id: str):
@@ -56,6 +56,16 @@ class MongoDatabase:
         self.galleries_collection.find_one_and_update({'_id': ObjectId(_id)}, {
             '$pull': {
                 'images': {
+                    "key": image_key
+                }
+            }})
+        return self.get_gallery(_id)
+
+    def set_cover_image(self, _id: str, image_url: str, image_key: str):
+        self.galleries_collection.find_one_and_update({'_id': ObjectId(_id)}, {
+            '$set': {
+                'cover_image': {
+                    "url": image_url,
                     "key": image_key
                 }
             }})
